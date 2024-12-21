@@ -1,25 +1,86 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LogoDark from '../../images/logo/logo-dark.svg';
-import Logo from '../../images/logo/logo.svg';
+import Logo from '../../images/logo.png';
+import axios from 'axios';
+import CryptoJS from 'crypto-js'
+import { useState ,useEffect } from 'react';
 
-const SignIn = () => {
+
+
+const SignIn = (props) => {
+
+  const [email , setEmail] = useState('')
+  const [password,setPassword] = useState('')
+  const navigate = useNavigate()
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    const requestData = {
+      email: email.toLowerCase(),
+      password: password,
+    };
+
+    try {
+      const response = await axios.post("https://events-back.cowdly.com/api/users/login/", requestData);
+
+      // console.log(response);
+      // props.loading(true);
+      const data = response.data;
+      const token = data.token;
+      const role = data.role || "guest";
+
+      // const id = data.id;
+
+      const secretKey = "s3cr3t$Key@123!";
+      const encryptedRole = CryptoJS.AES.encrypt(role, secretKey).toString();
+      const encryptedToken = CryptoJS.AES.encrypt(token, secretKey).toString();
+      sessionStorage.setItem("role", encryptedRole);
+      sessionStorage.setItem("token", encryptedToken);
+
+      // localStorage.setItem("id", id);
+      // props.loading(false);
+      props.onLogIn();
+        } catch (error) {
+      // setErrorMsg("An error occurred:", error);
+      // props.loading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    const encryptedToken = sessionStorage.getItem("token");
+    let decryptedToken = null;
+
+    if (encryptedToken) {
+      const secretKey = "s3cr3t$Key@123!";
+      decryptedToken = CryptoJS.AES.decrypt(encryptedToken, secretKey).toString(
+        CryptoJS.enc.Utf8
+      );
+    }
+
+    if (decryptedToken) {
+      navigate('/');
+    }
+  }, [navigate]);
+
   return (
     <>
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="flex flex-wrap items-center">
+        <div className="flex flex-wrap items-center ">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-17.5 px-26 text-center">
               <Link className="mb-5.5 inline-block" to="/">
                 <img className="hidden dark:block" src={Logo} alt="Logo" />
-                <img className="dark:hidden" src={LogoDark} alt="Logo" />
+                <img className="dark:hidden" src={Logo} alt="Logo" />
               </Link>
 
-              <p className="2xl:px-20">
+              {/* <p className="2xl:px-20">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit
                 suspendisse.
-              </p>
+              </p> */}
 
-              <span className="mt-15 inline-block">
+              {/* <span className="mt-15 inline-block">
                 <svg
                   width="350"
                   height="350"
@@ -140,26 +201,28 @@ const SignIn = () => {
                     fill="#1C2434"
                   />
                 </svg>
-              </span>
+              </span> */}
             </div>
           </div>
 
           <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-              <span className="mb-1.5 block font-medium">Start for free</span>
+              {/* <span className="mb-1.5 block font-medium">Start for free</span> */}
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign In to TailAdmin
+            تسجيل الدخول  
               </h2>
 
-              <form>
+              <form onSubmit={handleLogin}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Email
+                    البريد الالكتروني
                   </label>
                   <div className="relative">
                     <input
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder="ادخل البريد الالكتروني"
+                      value={email}
+                      onChange={(e)=>setEmail(e.target.value)}
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
 
@@ -185,12 +248,14 @@ const SignIn = () => {
 
                 <div className="mb-6">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Re-type Password
+                  كلمة المرور                 
                   </label>
                   <div className="relative">
                     <input
                       type="password"
-                      placeholder="6+ Characters, 1 Capital letter"
+                      placeholder="ادخل كلمة المرور"
+                      value={password}
+                      onChange={(e)=>setPassword(e.target.value)}
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
 
@@ -221,12 +286,13 @@ const SignIn = () => {
                 <div className="mb-5">
                   <input
                     type="submit"
-                    value="Sign In"
+                    value="تسجيل الدخول"
+                    
                     className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
                   />
                 </div>
 
-                <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
+                {/* <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                   <span>
                     <svg
                       width="20"
@@ -261,16 +327,16 @@ const SignIn = () => {
                     </svg>
                   </span>
                   Sign in with Google
-                </button>
+                </button> */}
 
-                <div className="mt-6 text-center">
+                {/* <div className="mt-6 text-center">
                   <p>
                     Don’t have any account?{' '}
                     <Link to="/auth/signup" className="text-primary">
                       Sign Up
                     </Link>
                   </p>
-                </div>
+                </div> */}
               </form>
             </div>
           </div>
