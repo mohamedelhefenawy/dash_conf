@@ -113,7 +113,7 @@ const Header = (props: {
           </ul>
 
           {/* <!-- User Area --> */}
-          <DropdownUser />
+          <DropdownUser logOut={props.logOut} />
           {/* <!-- User Area --> */}
         </div>
       </div>

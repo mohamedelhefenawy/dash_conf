@@ -155,7 +155,10 @@ const DropdownUser = (props) => {
             </Link>
           </li>
         </ul>
-        <button onClick={} className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button
+          onClick={props.logOut}
+          className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+        >
           <svg
             className="fill-current"
             width="22"
@@ -174,7 +177,7 @@ const DropdownUser = (props) => {
             />
           </svg>
           Log Out
-        </button >
+        </button>
       </div>
       {/* <!-- Dropdown End --> */}
     </div>
