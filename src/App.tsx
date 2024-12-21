@@ -1,7 +1,7 @@
 import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import CryptoJS  from 'crypto-js'
+import CryptoJS from 'crypto-js';
 
 import ECommerce from './pages/Dashboard/ECommerce';
 import SignIn from './pages/Authentication/SignIn';
@@ -11,15 +11,14 @@ import routes from './routes';
 
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
 
-
-const secretKey = "s3cr3t$Key@123!";
+const secretKey = 's3cr3t$Key@123!';
 
 const decryptFromSessionStorage = (key) => {
   const encryptedValue = sessionStorage.getItem(key);
   if (encryptedValue) {
     const decryptedValue = CryptoJS.AES.decrypt(
       encryptedValue,
-      secretKey
+      secretKey,
     ).toString(CryptoJS.enc.Utf8);
     return decryptedValue;
   }
@@ -27,10 +26,9 @@ const decryptFromSessionStorage = (key) => {
 };
 
 function App() {
-
-  const token = decryptFromSessionStorage("token");
-  const role = decryptFromSessionStorage("role")
-  const navigate = useNavigate()
+  const token = decryptFromSessionStorage('token');
+  const role = decryptFromSessionStorage('role');
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [reloadPage, setReloadPage] = useState(false);
 
@@ -38,48 +36,42 @@ function App() {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
-
-
   useEffect(() => {
-
     if (!token || !role) {
-        
-        sessionStorage.clear();
-        navigate('/auth/signin');
-      
+      sessionStorage.clear();
+      navigate('/auth/signin');
     }
   }, [navigate, token, role]);
 
-
-
-  useEffect(() => {
-    if (reloadPage) {
-      window.location.reload();
-      setReloadPage(false);
-    }
-  }, [reloadPage]);
+  // useEffect(() => {
+  //   if (reloadPage) {
+  //     window.location.reload();
+  //     setReloadPage(false);
+  //   }
+  // }, [reloadPage]);
 
   useEffect(() => {
-    const encryptedToken = sessionStorage.getItem("token");
+    const encryptedToken = sessionStorage.getItem('token');
     let decryptedToken = null;
 
     if (encryptedToken) {
-      const secretKey = "s3cr3t$Key@123!";
+      const secretKey = 's3cr3t$Key@123!';
       decryptedToken = CryptoJS.AES.decrypt(encryptedToken, secretKey).toString(
-        CryptoJS.enc.Utf8
+        CryptoJS.enc.Utf8,
       );
     }
 
-    if (decryptedToken) {
-      navigate('/');
-    }
+    // if (!decryptedToken) {
+    //   return null;
+    //   // navigate('/');
+    // }
   }, [navigate]);
 
   const handleLogin = useCallback(() => {
     navigate('/');
     // localStorage.setItem("currentPath", '/');
     // setReloadPage(true);
-    console.log('mohamed')
+    console.log('mohamed');
   }, [navigate]);
 
   const handleLogout = useCallback(() => {
@@ -100,7 +92,7 @@ function App() {
         containerClassName="overflow-auto"
       />
       <Routes>
-        <Route path="/auth/signin" element={<SignIn onLogIn = {handleLogin} />} />
+        <Route path="/auth/signin" element={<SignIn onLogIn={handleLogin} />} />
         {/* <Route path="/auth/signup" element={<SignUp />} /> */}
         <Route element={<DefaultLayout logOut={handleLogout} />}>
           <Route index element={<ECommerce />} />
@@ -112,7 +104,7 @@ function App() {
                 path={path}
                 element={
                   <Suspense fallback={<Loader />}>
-                    <Component  />
+                    <Component />
                   </Suspense>
                 }
               />
