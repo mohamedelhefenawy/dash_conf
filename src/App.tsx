@@ -71,7 +71,7 @@ function App() {
     navigate('/');
     // localStorage.setItem("currentPath", '/');
     // setReloadPage(true);
-    console.log('mohamed');
+    // console.log('mohamed');
   }, [navigate]);
 
   const handleLogout = useCallback(() => {
