@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import Breadcrumb from '../../components/Breadcrumb';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-const FormLayout = () => {
+
+const Updateconf = () => {
 
   const [name , setName] = useState('')
   const [image , setImage] = useState('')
@@ -13,32 +12,9 @@ const FormLayout = () => {
   const [location , setLocation] = useState('')
   const [link_location , setLink_location] = useState('')
 
-  const start_date = `${start}T${start_hour}Z`
-   const end_date = `${end}T${end_hour}Z`
-
-const postData = async()=> {
-  try{
-    const formData = new FormData()
-    formData.append('name', name);
-    formData.append('image', image); // Append the file
-    formData.append('start_date', start_date);
-    formData.append('end_date', end_date);
-    formData.append('location', location);
-    formData.append('location_url', link_location);
-
-  const response = axios.post('https://events-back.cowdly.com/api/events/',formData)
-  // alert('Conference added successfully!')
-  
-  }catch(error){
-    alert('Failed to add conference. Please try again.')
-  }
-}
-
-console.log(image)
-
   return (
     <>
-      <Breadcrumb pageName="اضافة مؤتمر" />
+      <Breadcrumb pageName="تعديل مؤتمر" />
 
       <div className="mx-auto  gap-10 sm:grid-cols-2">
         <div className="flex flex-col gap-20">
@@ -49,7 +25,7 @@ console.log(image)
                 Contact Form
               </h3> */}
             </div>
-            <form onSubmit={postData}>
+            <form action="#">
               <div className="p-6.5">
                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                   <div className="w-full ">
@@ -82,9 +58,7 @@ console.log(image)
                     id="upload"
                     type="file"
                     style={{ display: "none" }}
-                    onChange={(e)=>setImage(e.target.files[0])}
-
-      />      
+      />
                 </div>
 
                 <div className="mb-4.5 flex justify-between flex-wrap">
@@ -197,7 +171,7 @@ console.log(image)
                   />
                 </div>
 
-                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray" >
+                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
               اضف مؤتمر               
               </button>
               </div>
@@ -343,4 +317,4 @@ console.log(image)
   );
 };
 
-export default FormLayout;
+export default Updateconf;

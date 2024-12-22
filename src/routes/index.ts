@@ -9,6 +9,8 @@ const Settings = lazy(() => import('../pages/Settings'));
 const Tables = lazy(() => import('../pages/Tables'));
 const Alerts = lazy(() => import('../pages/UiElements/Alerts'));
 const Buttons = lazy(() => import('../pages/UiElements/Buttons'));
+const Conference = lazy(()=>import('../pages/Conference'))
+const Updateconf = lazy(()=>import('../pages/Form/Updateconf'))
 
 const coreRoutes = [
   {
@@ -17,10 +19,21 @@ const coreRoutes = [
     component: Calendar,
   },
   {
+    path: '/update',
+    title: 'تعديل المؤتمر',
+    component: Updateconf,
+  },
+  {
+    path:'/conference',
+    title:'المؤتمرات',
+    component:Conference,
+  },
+  {
     path: '/profile',
     title: 'صفحة المستخدم',
     component: Profile,
   },
+
   {
     path: '/forms/form-elements',
     title: 'Forms Elements',

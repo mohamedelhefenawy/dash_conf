@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../images/logo.png';
 import SidebarLinkGroup from './SidebarLinkGroup';
+import TableThree from './TableThree';
 import FormElements from '../pages/Form/FormElements';
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
-
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const { pathname } = location;
+  const navigate = useNavigate()
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -307,7 +308,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             fill="white"
                           />
                         </svg>
-                        المؤتمرات
+                        <button onClick={()=>navigate('/conference')}>المؤتمرات</button>
                         <svg
                           className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
                             open && 'rotate-180'
@@ -333,7 +334,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }`}
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                          <li>
+                        {/* <li>
                             <NavLink
                               to="/forms/form-elements"
                               className={({ isActive }) =>
@@ -342,8 +343,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               }
                             >
                               Form Elements
-                            </NavLink>
-                          </li>
+                            </NavLink> 
+                          </li> */}
                           <li>
                             <NavLink
                               to="/forms/form-layout"
