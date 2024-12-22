@@ -1,68 +1,118 @@
+import { useState } from 'react';
 import Breadcrumb from '../../components/Breadcrumb';
 
 const FormLayout = () => {
+
+  const [name , setName] = useState('')
+  const [image , setImage] = useState('')
+  const [start , setStart] = useState('')
+  const [end , setEnd] = useState('')
+  const [start_hour , setStart_hour] = useState('')
+  const [end_hour , setEnd_hour] = useState('')
+  const [location , setLocation] = useState('')
+  const [link_location , setLink_location] = useState('')
+
   return (
     <>
-      <Breadcrumb pageName="FormLayout" />
+      <Breadcrumb pageName="اضافة مؤتمر" />
 
-      <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
-        <div className="flex flex-col gap-9">
+      <div className="mx-auto  gap-10 sm:grid-cols-2">
+        <div className="flex flex-col gap-20">
           {/* <!-- Contact Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
+              {/* <h3 className="font-medium text-black dark:text-white">
                 Contact Form
-              </h3>
+              </h3> */}
             </div>
             <form action="#">
               <div className="p-6.5">
                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                  <div className="w-full xl:w-1/2">
+                  <div className="w-full ">
                     <label className="mb-2.5 block text-black dark:text-white">
-                      First name
+                      اسم المؤتمر
                     </label>
                     <input
                       type="text"
-                      placeholder="Enter your first name"
+                      placeholder="ادخل اسم المؤتمر"
+                      value={name}
+                      onChange={(e)=>setName(e.target.value)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
                   </div>
 
-                  <div className="w-full xl:w-1/2">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      Last name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your last name"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    />
-                  </div>
                 </div>
 
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Email <span className="text-meta-1">*</span>
+                    صورة المؤتمر <span className="text-meta-1">*</span>
                   </label>
-                  <input
-                    type="email"
+                  {/* <input
+                    type="file"
+                    accept="image/*"
                     placeholder="Enter your email address"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  />
+                    className="w-full rounded  border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary  active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  /> */}
+                  <label htmlFor='upload' className='cursor-pointer hover:text-black transition duraion-300'>اختر صورة</label>
+                  <input
+                    id="upload"
+                    type="file"
+                    style={{ display: "none" }}
+      />
                 </div>
 
-                <div className="mb-4.5">
+                <div className="mb-4.5 flex justify-between flex-wrap">
+                  <div>
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Subject
+                    موعد بداية المؤتمر
                   </label>
                   <input
-                    type="text"
-                    placeholder="Select subject"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    type="date"
+                    value={start}
+                    onChange={(e)=>setStart(e.target.value)}
+                    className="w-[300px] rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                  </div>
+                  <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    موعد نهاية المؤتمر
+                  </label>
+                  <input
+                    type="date"
+                    value={end}
+                    onChange={(e)=>setEnd(e.target.value)}
+                    className="w-[300px]  rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
+                </div>
 
-                <div className="mb-4.5">
+                <div className="mb-4.5 flex justify-between flex-wrap" >
+                  <div >
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    موعد بداية المؤتمر
+                  </label>
+                  <input
+                    type="time"
+                    value={start_hour}
+                    onChange={(e)=>setStart_hour(e.target.value)}
+                    className="w-[300px] rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                  </div>
+                  <div >
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    موعد نهاية المؤتمر
+                  </label>
+                  <input
+                    type="time"
+                    value={end_hour}
+                    onChange={(e)=>setEnd_hour(e.target.value)}
+                    className="w-[300px]  rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                  </div>
+
+                </div>
+
+                {/* <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
                     Subject
                   </label>
@@ -93,29 +143,43 @@ const FormLayout = () => {
                       </svg>
                     </span>
                   </div>
-                </div>
+                </div> */}
 
+                
+                  <div className="w-full ">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      المكان
+                    </label>
+                    <input
+                      type="text"
+                      value={location}
+                      onChange={(e)=>setLocation(e.target.value)}
+                      placeholder="ادخل مكان المؤتمر"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
                 <div className="mb-6">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Message
+                  <label className="mb-2.5 block text-black dark:text-white" id='location'>
+                    الرابط
                   </label>
-                  <textarea
-                    rows={6}
-                    placeholder="Type your message"
+                  <input type="url"
+                   id='location'
+                    value={link_location} 
+                    onChange ={(e)=>setLink_location(e.target.value)} 
+                    placeholder='ادخل رابط المؤتمر'
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  ></textarea>
+                  />
                 </div>
 
                 <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-                  Send Message
-                </button>
+              اضف مؤتمر               
+              </button>
               </div>
             </form>
           </div>
         </div>
 
-        <div className="flex flex-col gap-9">
-          {/* <!-- Sign In Form --> */}
+        {/* <div className="flex flex-col gap-9">
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
@@ -189,7 +253,6 @@ const FormLayout = () => {
             </form>
           </div>
 
-          {/* <!-- Sign Up Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
@@ -248,7 +311,7 @@ const FormLayout = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

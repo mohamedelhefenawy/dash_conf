@@ -3,8 +3,27 @@ import Breadcrumb from '../components/Breadcrumb';
 const Calendar = () => {
   return (
     <>
+    <div className='flex justify-between'>
       <Breadcrumb pageName="تاريخ الفعاليات" />
 
+      <div className='h-[90%]'>
+      <input list='months' placeholder='اختر الشهر'  className='' />
+      <datalist id='months'>
+    <option value="يناير">يناير</option>
+  <option value="فبراير"></option>
+  <option value="مارس"></option>
+  <option value="أبريل"></option>
+  <option value="مايو"></option>
+  <option value="يونيو"></option>
+  <option value="يوليو"></option>
+  <option value="أغسطس"></option>
+  <option value="سبتمبر"></option>
+  <option value="أكتوبر"></option>
+  <option value="نوفمبر"></option>
+  <option value="ديسمبر"></option>
+      </datalist>
+      </div>
+      </div>
       {/* <!-- ====== Calendar Section Start ====== --> */}
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <table className="w-full">

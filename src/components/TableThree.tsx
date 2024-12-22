@@ -12,7 +12,7 @@ const TableThree = () => {
                 الوظيفة
               </th>
               <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-                العمر
+                البريد الالكتروني
               </th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">
                 اخر مؤتمر تم الاشتراك فيه
@@ -30,7 +30,8 @@ const TableThree = () => {
                 <p className="text-black dark:text-white">معلم</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  35
+              library@gmail.com
+
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                 <p className="text-black dark:text-white">13 - يناير - 2023</p>
@@ -46,7 +47,8 @@ const TableThree = () => {
                 <p className="text-black dark:text-white">موظف</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  28
+              library@gmail.com
+
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                 <p className="text-black dark:text-white">13 - يناير - 2023</p>
@@ -62,7 +64,8 @@ const TableThree = () => {
                 <p className="text-black dark:text-white">مدير</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  45
+              library@gmail.com
+
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                 <p className="text-black dark:text-white">13 - يناير - 2023</p>
@@ -78,7 +81,7 @@ const TableThree = () => {
                 <p className="text-black dark:text-white">طالب</p>
               </td>
               <td className="py-5 px-4">
-                  21
+                  library@gmail.com
               </td>
               <td className="py-5 px-4">
                 <p className="text-black dark:text-white">13 - يناير - 2023</p>

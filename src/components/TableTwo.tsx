@@ -1,127 +1,117 @@
-import ProductOne from '../images/product/product-01.png';
-import ProductTwo from '../images/product/product-02.png';
-import ProductThree from '../images/product/product-03.png';
-import ProductFour from '../images/product/product-04.png';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const TableTwo = () => {
+  const token = "a1efd174703f533044d12a7992e76f949ed84e7f";
+  const [conferences, setConferenceData] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("https://events-back.cowdly.com/api/events/", {
+        headers: {
+          accept: "application/json",
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      const Allconf = response.data.map((conf) => {
+        const startDate = new Date(conf.start_date);
+        const dayStart = startDate.toISOString().split("T")[0];
+        const hourStart = startDate.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        });
+
+        const endDate = new Date(conf.end_date);
+        const dayEnd = endDate.toISOString().split("T")[0];
+        const hourEnd = endDate.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        });
+
+        return {
+          id: conf.id, // Ensure you have a unique ID for each conference
+          name: conf.name,
+          location: conf.location,
+          image: conf.image,
+          start: dayStart,
+          end: dayEnd ,
+          start_hour:hourStart,
+          end_hour:hourEnd
+        };
+      });
+
+      console.log(Allconf); // Logs the processed data
+      setConferenceData(Allconf); // Store the fetched data
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [token]);
+
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="py-6 px-4 md:px-6 xl:px-7.5">
         <h4 className="text-xl font-semibold text-black dark:text-white">
-          Top Products
+          المؤتمرات
         </h4>
       </div>
 
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
+      <div className="flex justify-between border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
         <div className="col-span-3 flex items-center">
-          <p className="font-medium">Product Name</p>
+          <p className="font-medium">اسم المؤتمر</p>
         </div>
         <div className="col-span-2 hidden items-center sm:flex">
-          <p className="font-medium">Category</p>
+          <p className="font-medium">المكان</p>
         </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Price</p>
+        <div className="col-span-2 flex items-center">
+          <p className="font-medium">موعد البداية</p>
         </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Sold</p>
+        <div className="col-span-2 flex items-center">
+          <p className="font-medium">موعد النهاية</p>
         </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Profit</p>
+        <div className="col-span-2 flex items-center">
+          <p className="font-medium">بداية الساعة</p>
+        </div>
+        <div className="col-span-2 flex items-center">
+          <p className="font-medium">نهاية الساعة</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="h-12.5 w-15 rounded-md">
-              <img src={ProductOne} alt="Product" />
+      {conferences.map((conference) => (
+        <div key={conference.id} className="flex justify-between border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
+          <div className="col-span-3 flex items-center">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <div className="h-12.5 w-15 rounded-md">
+                <img src={conference.image} alt={conference.name} className='h-[90%]' />
+              </div>
+              <p className="text-sm text-black dark:text-white">
+                {conference.name}
+              </p>
             </div>
-            <p className="text-sm text-black dark:text-white">
-              Apple Watch Series 7
-            </p>
+          </div>
+          <div className="col-span-2 hidden items-center sm:flex">
+            <p className="text-sm text-black dark:text-white">{conference.location}</p>
+          </div>
+          <div className="col-span-2 flex items-center">
+            <p className="text-sm text-black dark:text-white">{conference.start}</p>
+          </div>
+          <div className="col-span-2 flex items-center">
+            <p className="text-sm text-black dark:text-white">{conference.end}</p>
+          </div>
+          <div className="col-span-2 flex items-center">
+            <p className="text-sm text-black dark:text-white">{conference.start_hour}</p>
+          </div>
+          <div className="col-span-2 flex items-center">
+            <p className="text-sm text-black dark:text-white">{conference.end_hour}</p>
           </div>
         </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="text-sm text-black dark:text-white">Electronics</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">$269</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">22</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-meta-3">$45</p>
-        </div>
-      </div>
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="h-12.5 w-15 rounded-md">
-              <img src={ProductTwo} alt="Product" />
-            </div>
-            <p className="text-sm text-black dark:text-white">Macbook Pro M1</p>
-          </div>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="text-sm text-black dark:text-white">Electronics</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">$546</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">34</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-meta-3">$125</p>
-        </div>
-      </div>
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="h-12.5 w-15 rounded-md">
-              <img src={ProductThree} alt="Product" />
-            </div>
-            <p className="text-sm text-black dark:text-white">
-              Dell Inspiron 15
-            </p>
-          </div>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="text-sm text-black dark:text-white">Electronics</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">$443</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">64</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-meta-3">$247</p>
-        </div>
-      </div>
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="h-12.5 w-15 rounded-md">
-              <img src={ProductFour} alt="Product" />
-            </div>
-            <p className="text-sm text-black dark:text-white">HP Probook 450</p>
-          </div>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="text-sm text-black dark:text-white">Electronics</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">$499</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">72</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-meta-3">$103</p>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };
