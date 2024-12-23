@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Breadcrumb from '../../components/Breadcrumb';
 import axios from 'axios';
-import toast from 'react-hot-toast';
 const FormLayout = () => {
 
   const [name , setName] = useState('')
@@ -13,10 +12,11 @@ const FormLayout = () => {
   const [location , setLocation] = useState('')
   const [link_location , setLink_location] = useState('')
 
-  const start_date = `${start}T${start_hour}Z`
-   const end_date = `${end}T${end_hour}Z`
+  const start_date = new Date(`${start}T${start_hour}`).toISOString()
+   const end_date = new Date(`${end}T${end_hour}`).toISOString();
 
-const postData = async()=> {
+const postData = async(event)=> {
+  event.preventDefault()
   try{
     const formData = new FormData()
     formData.append('name', name);
@@ -26,7 +26,7 @@ const postData = async()=> {
     formData.append('location', location);
     formData.append('location_url', link_location);
 
-  const response = axios.post('https://events-back.cowdly.com/api/events/',formData)
+   const response =  await axios.post('https://events-back.cowdly.com/api/events/',formData)
   // alert('Conference added successfully!')
   
   }catch(error){
