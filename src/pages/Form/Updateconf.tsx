@@ -1,7 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Breadcrumb from '../../components/Breadcrumb';
+import axios from 'axios';
+import { useParams  } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const Updateconf = () => {
+
+  const sucess =()=>{
+    MySwal.fire({
+      title: <strong>تم تعديل المؤتمر</strong>,
+      icon: 'success',
+    })
+  }
+
+  const failed =()=>{
+    MySwal.fire({
+      title: <strong>يجب اختيار صورة المؤتمر اولا</strong>,
+      icon: 'error',
+    })
+  }
+
+  const {id} = useParams()
+  console.log(id)
 
   const [name , setName] = useState('')
   const [image , setImage] = useState('')
@@ -11,6 +34,90 @@ const Updateconf = () => {
   const [end_hour , setEnd_hour] = useState('')
   const [location , setLocation] = useState('')
   const [link_location , setLink_location] = useState('')
+
+
+  const token = "a1efd174703f533044d12a7992e76f949ed84e7f";
+
+
+
+
+  const fetch_conf = async (id) => {
+    try {
+      const response = await axios.get(`https://events-back.cowdly.com/api/events/${id}/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+  
+      const conf = response.data;
+      const startDate = new Date(conf.start_date);
+      const dayStart = startDate.toISOString().split("T")[0];
+      const hourStart = startDate.toTimeString().split(' ')[0].substring(0, 5);
+  
+      const endDate = new Date(conf.end_date);
+      const dayEnd = endDate.toISOString().split("T")[0];
+      const hourEnd = endDate.toTimeString().split(' ')[0].substring(0, 5);
+
+      setName(conf.name);
+      setImage(conf.image);
+      setStart(dayStart);
+      setEnd(dayEnd);
+      setStart_hour(hourStart);
+      setEnd_hour(hourEnd);
+      setLocation(conf.location);
+      setLink_location(conf.location_url);
+
+      console.log(image)
+    } catch (error) {
+      console.error("Error fetching conference data:", error);
+    }
+  };
+
+
+
+
+  const update_conference = async (event) => {
+    event.preventDefault()
+    try {
+
+      const start_date = new Date(`${start}T${start_hour}`).toISOString();
+      const end_date = new Date(`${end}T${end_hour}`).toISOString();
+
+      const formData = new FormData();
+      formData.append('name', name);
+      // formData.append('start', start);
+      // formData.append('end', end);
+      formData.append('start_date', start_date);
+      formData.append('end_date', end_date);
+      formData.append('location', location);
+      formData.append('location_url', link_location);
+  
+      // If an image is selected, append it
+      if (image) {
+        formData.append('image', image);
+      }
+  
+      const response = await axios.put(
+        `https://events-back.cowdly.com/api/events/${id}/`,
+        formData,
+        {
+          headers: {
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      sucess()
+    } catch (error) {
+      failed()
+    }
+  };
+
+
+  useEffect(()=>{
+    fetch_conf(id)
+  },[token])
+  
 
   return (
     <>
@@ -58,6 +165,7 @@ const Updateconf = () => {
                     id="upload"
                     type="file"
                     style={{ display: "none" }}
+                    onChange={(e) => setImage(e.target.files[0])}
       />
                 </div>
 
@@ -171,8 +279,9 @@ const Updateconf = () => {
                   />
                 </div>
 
-                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-              اضف مؤتمر               
+                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+                onClick={update_conference}>
+حفظ التعديلات
               </button>
               </div>
             </form>

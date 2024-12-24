@@ -19,7 +19,7 @@ const coreRoutes = [
     component: Calendar,
   },
   {
-    path: '/update',
+    path: '/update/:id',
     title: 'تعديل المؤتمر',
     component: Updateconf,
   },

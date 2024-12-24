@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import Breadcrumb from '../../components/Breadcrumb';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal)
+
 const FormLayout = () => {
 
   const [name , setName] = useState('')
@@ -12,27 +17,46 @@ const FormLayout = () => {
   const [location , setLocation] = useState('')
   const [link_location , setLink_location] = useState('')
 
-  const start_date = new Date(`${start}T${start_hour}`).toISOString()
-   const end_date = new Date(`${end}T${end_hour}`).toISOString();
+  // const start_date = new Date(`${start}T${start_hour}`).toISOString()
+  //  const end_date = new Date(`${end}T${end_hour}`).toISOString();
 
-const postData = async(event)=> {
-  event.preventDefault()
-  try{
-    const formData = new FormData()
-    formData.append('name', name);
-    formData.append('image', image); // Append the file
-    formData.append('start_date', start_date);
-    formData.append('end_date', end_date);
-    formData.append('location', location);
-    formData.append('location_url', link_location);
-
-   const response =  await axios.post('https://events-back.cowdly.com/api/events/',formData)
-  // alert('Conference added successfully!')
-  
-  }catch(error){
-    alert('Failed to add conference. Please try again.')
+  const handleAlert = ()=>{
+    MySwal.fire({
+      title:<strong>تم اضافة المؤتمر</strong>,
+      // html: <div className='flex gap-3'> <button>حذف</button> <button>رجوع</button> </div>
+      icon:'success'
+    })
   }
-}
+
+  const failedAlert = ()=>{
+    MySwal.fire({
+      title:<strong>لم يتم اضافة المؤتمر</strong>,
+      // html: <div className='flex gap-3'> <button>حذف</button> <button>رجوع</button> </div>
+      icon:'error'
+    })
+  }
+   const postData = async (event) => {
+    event.preventDefault();
+    try {
+      const start_date = new Date(`${start}T${start_hour}`).toISOString();
+      const end_date = new Date(`${end}T${end_hour}`).toISOString();
+  
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('image', image);
+      formData.append('start_date', start_date);
+      formData.append('end_date', end_date);
+      formData.append('location', location);
+      formData.append('location_url', link_location);
+  
+      const response = await axios.post('https://events-back.cowdly.com/api/events/', formData);
+      handleAlert()
+    } catch (error) {
+      failedAlert()
+      console.error(error);
+    }
+  };
+  
 
 console.log(image)
 
@@ -79,12 +103,16 @@ console.log(image)
                   /> */}
                   <label htmlFor='upload' className='cursor-pointer hover:text-black transition duraion-300'>اختر صورة</label>
                   <input
-                    id="upload"
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(e)=>setImage(e.target.files[0])}
+  id="upload"
+  type="file"
+  style={{ display: "none" }}
+  onChange={(e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  }}
+/>
 
-      />      
                 </div>
 
                 <div className="mb-4.5 flex justify-between flex-wrap">
@@ -197,9 +225,10 @@ console.log(image)
                   />
                 </div>
 
-                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray" >
-              اضف مؤتمر               
-              </button>
+                <button type="submit" className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
+  اضف مؤتمر
+</button>
+
               </div>
             </form>
           </div>
