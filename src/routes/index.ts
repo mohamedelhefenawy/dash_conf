@@ -11,8 +11,21 @@ const Alerts = lazy(() => import('../pages/UiElements/Alerts'));
 const Buttons = lazy(() => import('../pages/UiElements/Buttons'));
 const Conference = lazy(()=>import('../pages/Conference'))
 const Updateconf = lazy(()=>import('../pages/Form/Updateconf'))
+const Updatenadwa = lazy(()=>import('../pages/Form/UpdatedNadwa'))
+const Nadwa = lazy(()=>import('../pages/Nadwa'))
+
 
 const coreRoutes = [
+  {
+    path: '/nadwa',
+    title: 'الندوات',
+    component: Nadwa,
+  },
+  {
+    path: '/updatenadwa/:id',
+    title: 'تعديل الندوة',
+    component: Updatenadwa,
+  },
   {
     path: '/calendar',
     title: 'تاريخ الفعاليات',

@@ -6,7 +6,7 @@ import withReactContent from 'sweetalert2-react-content';
 
 const MySwal = withReactContent(Swal);
 
-const TableTwo = () => {
+const TableTwoNadwad = () => {
 
   const token = "a1efd174703f533044d12a7992e76f949ed84e7f";
   const [conferences, setConferenceData] = useState([]);
@@ -19,7 +19,7 @@ const TableTwo = () => {
 
   const handlealert = () => {
     MySwal.fire({
-      title: <strong>تم حذف المؤتمر</strong>,
+      title: <strong>تم حذف الندوة</strong>,
       icon: 'success',
     });
   };
@@ -27,7 +27,7 @@ const TableTwo = () => {
   // Fetching Data
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://events-back.cowdly.com/api/events/?type=%D8%A7%D9%84%D9%85%D8%A4%D8%AA%D9%85%D8%B1%D8%A7%D8%AA", {
+      const response = await axios.get("https://events-back.cowdly.com/api/events/?type=%D8%A7%D9%84%D9%86%D8%AF%D9%88%D8%A7%D8%AA", {
         headers: {
           accept: "application/json",
           Authorization: `Token ${token}`,
@@ -105,8 +105,8 @@ const TableTwo = () => {
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       {/* Header */}
       <div className=" flex justify-between items-center py-6 px-4 md:px-6 xl:px-7.5">
-        <h4 className="text-xl font-semibold text-black dark:text-white">المؤتمرات</h4>
-        <button onClick={()=>navigate('/forms/form-layout')} className='bg-primary rounded-xl p-2 text-white'>اضافة مؤتمر</button>
+        <h4 className="text-xl font-semibold text-black dark:text-white">اضافة ندوة</h4>
+        <button onClick={()=>navigate('/forms/form-elements')} className='bg-primary rounded-xl p-2 text-white'>اضافة ندوة</button>
       </div>
 
       {/* Table */}
@@ -115,7 +115,7 @@ const TableTwo = () => {
           {/* Table Header */}
           <thead>
             <tr className="bg-gray-100 dark:bg-gray-700">
-              {["اسم المؤتمر", "المكان", "موعد البداية", "موعد النهاية", "بداية الساعة", "نهاية الساعة", "الخيارات"].map(
+              {["اسم الندوة", "المكان", "موعد البداية", "موعد النهاية", "بداية الساعة", "نهاية الساعة", "الخيارات"].map(
                 (header, index) => (
                   <th
                     key={index}
@@ -173,7 +173,7 @@ const TableTwo = () => {
                         <li>
                           <button
                             className="text-gray-800 hover:text-black w-full text-left"
-                            onClick={() => navigate(`/update/${conference.id}`)}
+                            onClick={() => navigate(`/updatenadwa/${conference.id}`)}
                           >
                             تعديل البيانات
                           </button>
@@ -186,7 +186,7 @@ const TableTwo = () => {
                               setDeleted(true);  // Open the delete confirmation modal
                             }}
                           >
-                            حذف المؤتمر
+                            حذف الندوة
                           </button>
                         </li>
                       </ul>
@@ -203,7 +203,7 @@ const TableTwo = () => {
       {deleted && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-[90%] sm:w-[50%] py-10 px-6 text-center">
-            <h2 className="mb-6 text-lg font-semibold">هل انت متأكد من حذف المؤتمر؟</h2>
+            <h2 className="mb-6 text-lg font-semibold">هل انت متأكد من حذف الندوة؟</h2>
             <div className="flex justify-center gap-5">
               <button
                 className="px-6 py-2 rounded "
@@ -227,4 +227,4 @@ const TableTwo = () => {
   );
 };
 
-export default TableTwo;
+export default TableTwoNadwad;

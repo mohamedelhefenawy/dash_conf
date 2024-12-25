@@ -1,31 +1,30 @@
-import { useState,useEffect} from 'react';
+import { useEffect, useState } from 'react';
 import Breadcrumb from '../../components/Breadcrumb';
 import axios from 'axios';
+import { useParams  } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import CryptoJS from 'crypto-js'
 
-const MySwal = withReactContent(Swal)
+const MySwal = withReactContent(Swal);
 
-const FormLayout = () => {
+const Updateconf = () => {
 
-  const  [decryptedToken,setDecryptedToken]   =useState()
+  const sucess =()=>{
+    MySwal.fire({
+      title: <strong>تم تعديل الندوة</strong>,
+      icon: 'success',
+    })
+  }
 
-  useEffect(() => {
-    const encryptedToken = sessionStorage.getItem("token");
+  const failed =()=>{
+    MySwal.fire({
+      title: <strong>يجب اختيار صورة الندوة اولا</strong>,
+      icon: 'error',
+    })
+  }
 
-    if (encryptedToken) {
-      const secretKey = "s3cr3t$Key@123!";
-      setDecryptedToken(CryptoJS.AES.decrypt(encryptedToken, secretKey).toString(
-        CryptoJS.enc.Utf8)  
-      );
-      console.log(decryptedToken)
-    }
-
-  
-  }, [decryptedToken]);
-
-
+  const {id} = useParams()
+  console.log(id)
 
   const [name , setName] = useState('')
   const [image , setImage] = useState('')
@@ -36,59 +35,94 @@ const FormLayout = () => {
   const [location , setLocation] = useState('')
   const [link_location , setLink_location] = useState('')
 
-  // const start_date = new Date(`${start}T${start_hour}`).toISOString()
-  //  const end_date = new Date(`${end}T${end_hour}`).toISOString();
 
-  const handleAlert = ()=>{
-    MySwal.fire({
-      title:<strong>تم اضافة المؤتمر</strong>,
-      // html: <div className='flex gap-3'> <button>حذف</button> <button>رجوع</button> </div>
-      icon:'success'
-    })
-  }
+  const token = "a1efd174703f533044d12a7992e76f949ed84e7f";
 
-  const failedAlert = ()=>{
-    MySwal.fire({
-      title:<strong>لم يتم اضافة المؤتمر</strong>,
-      // html: <div className='flex gap-3'> <button>حذف</button> <button>رجوع</button> </div>
-      icon:'error'
-    })
-  }
-   const postData = async (event) => {
-    event.preventDefault();
+
+
+
+  const fetch_conf = async (id) => {
     try {
+      const response = await axios.get(`https://events-back.cowdly.com/api/events/${id}/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+  
+      const conf = response.data;
+      const startDate = new Date(conf.start_date);
+      const dayStart = startDate.toISOString().split("T")[0];
+      const hourStart = startDate.toTimeString().split(' ')[0].substring(0, 5);
+  
+      const endDate = new Date(conf.end_date);
+      const dayEnd = endDate.toISOString().split("T")[0];
+      const hourEnd = endDate.toTimeString().split(' ')[0].substring(0, 5);
+
+      setName(conf.name);
+      setImage(conf.image);
+      setStart(dayStart);
+      setEnd(dayEnd);
+      setStart_hour(hourStart);
+      setEnd_hour(hourEnd);
+      setLocation(conf.location);
+      setLink_location(conf.location_url);
+
+      console.log(image)
+    } catch (error) {
+      console.error("Error fetching conference data:", error);
+    }
+  };
+
+
+
+
+  const update_conference = async (event) => {
+    event.preventDefault()
+    try {
+
       const start_date = new Date(`${start}T${start_hour}`).toISOString();
       const end_date = new Date(`${end}T${end_hour}`).toISOString();
-  
+
       const formData = new FormData();
-      formData.append('type',"المؤتمرات")
+      formData.append('type','الندوات')
       formData.append('name', name);
-      formData.append('image', image);
+      // formData.append('start', start);
+      // formData.append('end', end);
       formData.append('start_date', start_date);
       formData.append('end_date', end_date);
       formData.append('location', location);
       formData.append('location_url', link_location);
   
-      const response = await axios.post('https://events-back.cowdly.com/api/events/', formData,{
-        headers:{
-          Authorization:`Token ${decryptedToken}`
+      // If an image is selected, append it
+      if (image) {
+        formData.append('image', image);
+      }
+  
+      const response = await axios.put(
+        `https://events-back.cowdly.com/api/events/${id}/`,
+        formData,
+        {
+          headers: {
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
         }
-      });
-      handleAlert()
+      );
+      sucess()
     } catch (error) {
-      failedAlert()
-      console.error(error);
+      failed()
     }
   };
 
-  
-  
 
-console.log(image)
+  useEffect(()=>{
+    fetch_conf(id)
+  },[token])
+  
 
   return (
     <>
-      <Breadcrumb pageName="اضافة مؤتمر" />
+      <Breadcrumb pageName="تعديل ندوة" />
 
       <div className="mx-auto  gap-10 sm:grid-cols-2">
         <div className="flex flex-col gap-20">
@@ -99,16 +133,16 @@ console.log(image)
                 Contact Form
               </h3> */}
             </div>
-            <form onSubmit={postData}>
+            <form action="#">
               <div className="p-6.5">
                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                   <div className="w-full ">
                     <label className="mb-2.5 block text-black dark:text-white">
-                      اسم المؤتمر
+                      اسم الندوة
                     </label>
                     <input
                       type="text"
-                      placeholder="ادخل اسم المؤتمر"
+                      placeholder="ادخل اسم الندوة"
                       value={name}
                       onChange={(e)=>setName(e.target.value)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -119,7 +153,7 @@ console.log(image)
 
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    صورة المؤتمر <span className="text-meta-1">*</span>
+                    صورة الندوة <span className="text-meta-1">*</span>
                   </label>
                   {/* <input
                     type="file"
@@ -129,22 +163,17 @@ console.log(image)
                   /> */}
                   <label htmlFor='upload' className='cursor-pointer hover:text-black transition duraion-300'>اختر صورة</label>
                   <input
-  id="upload"
-  type="file"
-  style={{ display: "none" }}
-  onChange={(e) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
-  }}
-/>
-
+                    id="upload"
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setImage(e.target.files[0])}
+      />
                 </div>
 
                 <div className="mb-4.5 flex justify-between flex-wrap">
                   <div>
                   <label className="mb-2.5 block text-black dark:text-white">
-                    موعد بداية المؤتمر
+                    موعد بداية الندوة
                   </label>
                   <input
                     type="date"
@@ -155,7 +184,7 @@ console.log(image)
                   </div>
                   <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    موعد نهاية المؤتمر
+                    موعد نهاية الندوة
                   </label>
                   <input
                     type="date"
@@ -169,7 +198,7 @@ console.log(image)
                 <div className="mb-4.5 flex justify-between flex-wrap" >
                   <div >
                   <label className="mb-2.5 block text-black dark:text-white">
-                    موعد بداية المؤتمر
+                    موعد بداية الندوة
                   </label>
                   <input
                     type="time"
@@ -180,7 +209,7 @@ console.log(image)
                   </div>
                   <div >
                   <label className="mb-2.5 block text-black dark:text-white">
-                    موعد نهاية المؤتمر
+                    موعد نهاية الندوة
                   </label>
                   <input
                     type="time"
@@ -234,7 +263,7 @@ console.log(image)
                       type="text"
                       value={location}
                       onChange={(e)=>setLocation(e.target.value)}
-                      placeholder="ادخل مكان المؤتمر"
+                      placeholder="ادخل مكان الندوة"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
                   </div>
@@ -246,15 +275,15 @@ console.log(image)
                    id='location'
                     value={link_location} 
                     onChange ={(e)=>setLink_location(e.target.value)} 
-                    placeholder='ادخل رابط المؤتمر'
+                    placeholder='ادخل رابط الندوة'
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
 
-                <button type="submit" className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-  اضف مؤتمر
-</button>
-
+                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+                onClick={update_conference}>
+حفظ التعديلات
+              </button>
               </div>
             </form>
           </div>
@@ -398,4 +427,4 @@ console.log(image)
   );
 };
 
-export default FormLayout;
+export default Updateconf;

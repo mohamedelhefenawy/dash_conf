@@ -12,14 +12,13 @@
 }
 
 @layer utilities {
-  /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
   }
 
   .chat-height {
@@ -30,7 +29,6 @@
   }
 }
 
-/* third-party libraries CSS */
 
 .tableCheckbox:checked ~ div span {
   @apply opacity-100;

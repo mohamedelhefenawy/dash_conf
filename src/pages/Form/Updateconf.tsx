@@ -84,6 +84,7 @@ const Updateconf = () => {
       const end_date = new Date(`${end}T${end_hour}`).toISOString();
 
       const formData = new FormData();
+      formData.append('type','المؤتمرات')
       formData.append('name', name);
       // formData.append('start', start);
       // formData.append('end', end);
