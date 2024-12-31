@@ -1,15 +1,45 @@
 import Breadcrumb from '../components/Breadcrumb';
 import userThree from '../images/user/user-03.png';
 import fireToast from '../hooks/fireToast';
-import { Table } from "../components/TableSettings";
-import { Modal } from "../components/ModalSettings";
-import { useState,useEffect } from "react";
+import { Table } from '../components/TableSettings';
+import { Modal } from '../components/ModalSettings';
+import { useState, useEffect } from 'react';
 const Settings = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [rows, setRows] = useState(localStorage.getItem("alertSettings")?JSON.parse(localStorage.getItem("alertSettings")):[]);
+  // const [name , setName] = useState('')
+  // const [email,setEmail]=useState('')
+  // const [phone , setPhone] = useState('')
+  // const [user ,setUser]=useState('')
+
+  const [data, setData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    user: '',
+  });
+
+  const  handleChange = (e) => {
+    const { name, value } = e.target ;
+
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    localStorage.setItem('data', JSON.stringify(data));
+    console.log(data);
+  }, [data]);
+
+  const [rows, setRows] = useState(
+    localStorage.getItem('alertSettings')
+      ? JSON.parse(localStorage.getItem('alertSettings'))
+      : [],
+  );
   useEffect(() => {
     // storing input name
-    localStorage.setItem("alertSettings", JSON.stringify(rows));
+    localStorage.setItem('data', JSON.stringify(data));
   }, [rows]);
   const [rowToEdit, setRowToEdit] = useState(null);
 
@@ -23,6 +53,7 @@ const Settings = () => {
     setModalOpen(true);
   };
 
+
   const handleSubmit = (newRow) => {
     rowToEdit === null
       ? setRows([...rows, newRow])
@@ -31,22 +62,21 @@ const Settings = () => {
             if (idx !== rowToEdit) return currRow;
 
             return newRow;
-          })
+          }),
         );
   };
 
   return (
     <>
       <div className="mx-auto max-w-270">
-        
-        <Breadcrumb pageName="Settings" />
+        <Breadcrumb pageName="الاعدادات" />
 
-        <div className="grid grid-cols-5 gap-8">
-          <div className="col-span-5 xl:col-span-3">
-            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div className="grid grid-cols-5 gap-8 ">
+          <div className="col-span-5 xl:col-span-5">
+            <div className="rounded-sm  border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="border-b border-stroke py-4 px-7 dark:border-strokedark">
                 <h3 className="font-medium text-black dark:text-white">
-                  Personal Information
+                  المعلومات الشخصية
                 </h3>
               </div>
               <div className="p-7">
@@ -57,7 +87,7 @@ const Settings = () => {
                         className="mb-3 block text-sm font-medium text-black dark:text-white"
                         htmlFor="fullName"
                       >
-                        Full Name
+                        الاسم كامل
                       </label>
                       <div className="relative">
                         <span className="absolute left-4.5 top-4">
@@ -88,10 +118,11 @@ const Settings = () => {
                         <input
                           className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                           type="text"
-                          name="fullName"
+                          name="name"
                           id="fullName"
-                          placeholder="Devid Jhon"
-                          defaultValue="Devid Jhon"
+                          placeholder="اسم المستخدم"
+                          value={data.name}
+                          onChange={(e) => handleChange(e)}
                         />
                       </div>
                     </div>
@@ -101,15 +132,16 @@ const Settings = () => {
                         className="mb-3 block text-sm font-medium text-black dark:text-white"
                         htmlFor="phoneNumber"
                       >
-                        Phone Number
+                        رقم التليفون
                       </label>
                       <input
                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                         type="text"
                         name="phoneNumber"
                         id="phoneNumber"
-                        placeholder="+990 3343 7865"
-                        defaultValue="+990 3343 7865"
+                        placeholder="رقم التليفون"
+                        value={data.phone}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
@@ -119,7 +151,7 @@ const Settings = () => {
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
                       htmlFor="emailAddress"
                     >
-                      Email Address
+                      البريد الالكتروني
                     </label>
                     <div className="relative">
                       <span className="absolute left-4.5 top-4">
@@ -150,10 +182,11 @@ const Settings = () => {
                       <input
                         className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                         type="email"
-                        name="emailAddress"
+                        name="email"
                         id="emailAddress"
-                        placeholder="devidjond45@gmail.com"
-                        defaultValue="devidjond45@gmail.com"
+                        placeholder="البريد الالكتروني"
+                        value={data.email}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
@@ -163,18 +196,19 @@ const Settings = () => {
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
                       htmlFor="Username"
                     >
-                      Username
+                      اسم المستخدم
                     </label>
                     <input
                       className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                       type="text"
-                      name="Username"
+                      name="user"
                       id="Username"
-                      placeholder="devidjhon24"
-                      defaultValue="devidjhon24"
+                      placeholder="اسم المستخدم"
+                      value={data.user}
+                      onChange={(e) => handleChange(e)}
                     />
                   </div>
-
+                  {/* 
                   <div className="mb-5.5">
                     <label
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
@@ -223,28 +257,28 @@ const Settings = () => {
                         defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque posuere fermentum urna, eu condimentum mauris tempus ut. Donec fermentum blandit aliquet."
                       ></textarea>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="flex justify-end gap-4.5">
                     <button
                       className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                       type="submit"
                     >
-                      Cancel
+                      الغاء
                     </button>
                     <button
                       className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:shadow-1"
                       type="submit"
                       onClick={fireToast}
                     >
-                      Save
+                      حفظ
                     </button>
                   </div>
                 </form>
               </div>
             </div>
           </div>
-          <div className="col-span-5 xl:col-span-2">
+          {/* <div className="col-span-5 xl:col-span-2">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="border-b border-stroke py-4 px-7 dark:border-strokedark">
                 <h3 className="font-medium text-black dark:text-white">
@@ -336,7 +370,7 @@ const Settings = () => {
                 </form>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
