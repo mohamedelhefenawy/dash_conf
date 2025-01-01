@@ -26,7 +26,7 @@ const DropdownUser = (props) => {
   });
   const data = localStorage.getItem('data')
   const name = JSON.parse(data)
-  console.log(name.name)
+  console.log(name?.name)
 
   // close if the esc key is pressed
   useEffect(() => {
