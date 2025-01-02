@@ -80,7 +80,7 @@ const Settings = () => {
                 </h3>
               </div>
               <div className="p-7">
-                <form action="/settings">
+                <div >
                   <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/2">
                       <label
@@ -262,19 +262,19 @@ const Settings = () => {
                   <div className="flex justify-end gap-4.5">
                     <button
                       className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                      type="submit"
+                      
                     >
                       الغاء
                     </button>
                     <button
                       className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:shadow-1"
-                      type="submit"
+                      onClick={() => window.location.reload()}
                       
                     >
                       حفظ
                     </button>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
