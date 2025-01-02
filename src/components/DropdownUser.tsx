@@ -24,9 +24,9 @@ const DropdownUser = (props) => {
     document.addEventListener('click', clickHandler);
     return () => document.removeEventListener('click', clickHandler);
   });
-  const data = localStorage.getItem('data')
-  const name = JSON.parse(data)
-  console.log(name.name)
+  // const data = localStorage.getItem('data')
+  // const name = JSON.parse(data)
+  // console.log(name.name)
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -50,7 +50,7 @@ const DropdownUser = (props) => {
           <span className="block text-sm font-medium text-black dark:text-white">
           
           </span>
-          <span className="block text-xs">{name.name}</span>
+          <span className="block text-xs">محمد الحفناوي</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
