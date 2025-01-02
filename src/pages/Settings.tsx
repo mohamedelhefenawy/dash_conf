@@ -269,7 +269,7 @@ const Settings = () => {
                     <button
                       className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:shadow-1"
                       type="submit"
-                      onClick={fireToast}
+                      
                     >
                       حفظ
                     </button>
